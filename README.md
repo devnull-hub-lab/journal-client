@@ -1,2 +1,3 @@
-# journal-client
-Journal client that connect to journal-server
+Instructions to build: gcc journalnet.c -o journalnet
+
+Run Client: ./journalnet user@host
