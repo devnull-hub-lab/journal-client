@@ -1,3 +1,4 @@
-Instructions to build: gcc journalnet.c -o journalnet
+Instructions to build:
+make && make install
 
-Run Client: ./journalnet user@host
+Run Client: /usr/local/bin/journalnet user@host
