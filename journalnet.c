@@ -66,6 +66,12 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
     
+    if (strstr(buffer, "Journal not found") != NULL) {
+        fprintf(stderr, "%s\n", buffer);
+        close(sockfd);
+        return 1;  // Set the exit code to indicate an error
+    }
+    
     printf("%s", buffer);
 
     close(sockfd);
