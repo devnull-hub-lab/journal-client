@@ -54,25 +54,23 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
 
-    //reading server data
+    // Reading and printing server data
     memset(buffer, 0, sizeof(buffer));
-    ssize_t totalBytesRead = 0;
-    while ((n = read(sockfd, buffer + totalBytesRead, sizeof(buffer) - totalBytesRead - 1)) > 0) {
-        totalBytesRead += n;
+    ssize_t bytesRead;
+    while ((bytesRead = read(sockfd, buffer, sizeof(buffer) - 1)) > 0) {
+        buffer[bytesRead] = '\0';
+        printf("%s", buffer);
     }
-    
-    if (n < 0) {
-        perror("Error on reading server data");
+
+    if (bytesRead < 0) {
+        perror("Error reading server data");
         exit(1);
     }
     
     if (strstr(buffer, "Journal not found") != NULL) {
-        fprintf(stderr, "%s\n", buffer);
         close(sockfd);
         return 1;  // Set the exit code to indicate an error
     }
-    
-    printf("%s", buffer);
 
     close(sockfd);
 
