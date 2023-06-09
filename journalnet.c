@@ -56,14 +56,17 @@ int main(int argc, char *argv[]) {
 
     //reading server data
     memset(buffer, 0, sizeof(buffer));
-    while ((n = read(sockfd, buffer, sizeof(buffer) - 1)) > 0) {
-        printf("%s", buffer);
-        memset(buffer, 0, sizeof(buffer));
+    ssize_t totalBytesRead = 0;
+    while ((n = read(sockfd, buffer + totalBytesRead, sizeof(buffer) - totalBytesRead - 1)) > 0) {
+        totalBytesRead += n;
     }
+    
     if (n < 0) {
         perror("Error on reading server data");
         exit(1);
     }
+    
+    printf("%s", buffer);
 
     close(sockfd);
 
