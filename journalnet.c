@@ -16,8 +16,8 @@ int main(int argc, char *argv[]) {
     int flags_opt = 0;
 
     if (argc < 2 || argc > 3) {
-        fprintf(stderr, "Usage: %s [-r] user@host\n", argv[0]);
-        fprintf(stderr, "See man for more info\n");
+        fprintf(stderr, "Usage: %s [-r] user@host\n\n", argv[0]);
+        fprintf(stderr, "-r: Reverse Journal Search. Searches in the reverse order in which journal entries were entered: most recent first.\n\n");
         exit(1);
     }
 
