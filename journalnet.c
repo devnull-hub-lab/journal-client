@@ -11,18 +11,42 @@
 #define MAX_BUFFER_SIZE 1024
 
 int main(int argc, char *argv[]) {
-    if (argc != 2) {
-        fprintf(stderr, "Usage: %s user@host\n", argv[0]);
+    
+    short flag_r = 0, flag_n = 0;
+    int flags_opt = 0;
+
+    if (argc < 2 || argc > 3) {
+        fprintf(stderr, "Usage: %s [-r] user@host\n", argv[0]);
+        fprintf(stderr, "See man for more info\n");
         exit(1);
     }
 
-    char user[MAX_BUFFER_SIZE], host[MAX_BUFFER_SIZE];
-    sscanf(argv[1], "%[^@]@%s", user, host);
+    int userHostIndex = 1;
+
+    while ((flags_opt = getopt(argc, argv, "rst")) != -1) {
+        switch (flags_opt) {
+            case 'r':
+                flag_r = 1;
+                break;
+            //case 's':
+            //    flag_n = 1;
+            //    break;
+            default:
+                fprintf(stderr, "Invalid option: -%c\n", optopt);
+                exit(1);
+        }
+    }
+
+    if (flag_r || flag_n)
+        userHostIndex = 2;
+
+    char user[MAX_BUFFER_SIZE] = "", host[MAX_BUFFER_SIZE] = "", flags[MAX_BUFFER_SIZE] = "";
+    char buffer[MAX_BUFFER_SIZE] = "";
+    sscanf(argv[userHostIndex], "%[^@]@%s", user, host);
 
     int sockfd, n;
     struct sockaddr_in serv_addr;
     struct hostent *server;
-    char buffer[MAX_BUFFER_SIZE];
 
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd < 0) {
@@ -47,8 +71,15 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
 
+    if (flag_r) {
+        strcat(flags, "r");
+    }
+    //if (flag_n) {
+    //    strcat(flags, "s");
+    //}
+
     //sending param to server
-    snprintf(buffer, sizeof(buffer), "%s@%s", user, host);
+    snprintf(buffer, sizeof(buffer), "%s@%s", user, flags);
     if (write(sockfd, buffer, strlen(buffer)) < 0) {
         perror("Error on sending data to server");
         exit(1);
