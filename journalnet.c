@@ -48,11 +48,13 @@ int main(int argc, char *argv[]) {
 
     userHostIndex = optind;
 
-    char user[MAX_BUFFER_SIZE] = "", host[MAX_BUFFER_SIZE] = "", flags[MAX_BUFFER_SIZE] = "";
+    char user[32] = ""; //limit unix system
+    char host[255] = ""; //limit IETF spec
+    char flags[50] = "";
     char buffer[MAX_BUFFER_SIZE] = "";
     sscanf(argv[userHostIndex], "%[^@]@%s", user, host);
 
-    int sockfd, n;
+    int sockfd;
     struct sockaddr_in serv_addr;
     struct hostent *server;
 
